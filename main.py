@@ -98,20 +98,47 @@ class PlayfairCipher:
 
     def print_matrix(self) -> None:
         """Tampilkan matriks kunci dalam format yang mudah dibaca."""
+        border = "├───┼───┼───┼───┼───┤"
+        print("┌───┬───┬───┬───┬───┐")
         for row in self.matrix:
-            print(" ".join(row))
+            print("│ " + " │ ".join(row) + " │")
+            if row != self.matrix[-1]:
+                print(border)
+        print("└───┴───┴───┴───┴───┘")
 
 
-if __name__ == "__main__":
-    key = "PLAYFAIR EXAMPLE"
-    plaintext = "Hide the gold in the tree stump"
+def get_input(label: str) -> str:
+    """Minta input sampai pengguna menulis setidaknya satu huruf."""
+    while True:
+        value = input(label).strip()
+        if PlayfairCipher._normalize(value):
+            return value
+        print("Input harus mengandung minimal satu huruf A-Z. Silakan coba lagi.\n")
+
+
+def main() -> None:
+    """Jalankan program Playfair Cipher interaktif."""
+    print("=" * 46)
+    print("          PROGRAM PLAYFAIR CIPHER")
+    print("=" * 46)
+    print("Catatan: huruf J akan diproses sebagai I.\n")
+
+    key = get_input("Masukkan kata kunci : ")
+    plaintext = get_input("Masukkan plaintext  : ")
+
     cipher = PlayfairCipher(key)
-
     ciphertext = cipher.encrypt(plaintext)
     decrypted_text = cipher.decrypt(ciphertext)
 
-    print("Matriks kunci:")
+    print("\n" + "-" * 46)
+    print("HASIL")
+    print("-" * 46)
+    print(f"Kata kunci : {PlayfairCipher._normalize(key)}")
     cipher.print_matrix()
-    print(f"\nPlaintext  : {plaintext}")
+    print(f"Plaintext  : {PlayfairCipher._normalize(plaintext)}")
     print(f"Ciphertext : {ciphertext}")
     print(f"Dekripsi   : {decrypted_text}")
+
+
+if __name__ == "__main__":
+    main()
